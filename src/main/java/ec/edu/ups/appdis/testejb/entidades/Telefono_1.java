@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Telefono.findAll", query = "SELECT t FROM Telefono t"),
     @NamedQuery(name = "Telefono.findById", query = "SELECT t FROM Telefono t WHERE t.id = :id"),
     @NamedQuery(name = "Telefono.findByNumero", query = "SELECT t FROM Telefono t WHERE t.numero = :numero")})
-public class Telefono implements Serializable {
+public class Telefono_1 implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -50,25 +50,25 @@ public class Telefono implements Serializable {
     @ManyToOne(optional = false)
     private Persona personaId;
 
-    public Telefono() {
+    public Telefono_1() {
     }
 
-    public Telefono(Integer id) {
+    public Telefono_1(Integer id) {
         this.id = id;
     }
 
-    public Telefono(Integer id, int numero, String tipo) {
+    public Telefono_1(Integer id, int numero, String tipo) {
         this.id = id;
         this.numero = numero;
         this.tipo = tipo;
     }
     
-    public Telefono(int numero, String tipo) {
+    public Telefono_1(int numero, String tipo) {
         this.numero = numero;
         this.tipo = tipo;
     }
 
-    public Telefono(Integer id, int numero, String tipo, Persona personaId) {
+    public Telefono_1(Integer id, int numero, String tipo, Persona personaId) {
         this.id = id;
         this.numero = numero;
         this.tipo = tipo;
@@ -117,10 +117,10 @@ public class Telefono implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Telefono)) {
+        if (!(object instanceof Telefono_1)) {
             return false;
         }
-        Telefono other = (Telefono) object;
+        Telefono_1 other = (Telefono_1) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }

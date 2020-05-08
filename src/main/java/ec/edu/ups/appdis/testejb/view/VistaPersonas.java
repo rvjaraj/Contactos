@@ -561,7 +561,7 @@ public class VistaPersonas extends javax.swing.JFrame {
                 personaAux = p;
                 txtNombreB.setText(p.getNombre());
                 txtCedulaB.setText(p.getCedula());
-                List<Telefono> lista = (List<Telefono>) p.getListTelefonos();
+                List<Telefono> lista = (List<Telefono>) p.getTelefonoCollection();
                 if (!lista.isEmpty()) {
                     limpiarTablaCotactoB();
                     DefaultTableModel model = (DefaultTableModel) tablaContacosB.getModel();
@@ -624,7 +624,7 @@ public class VistaPersonas extends javax.swing.JFrame {
             try {
                 personaAux.setCedula(txtCedulaB.getText());
                 personaAux.setNombre(txtNombreB.getText());
-                personaAux.setListTelefonos(listaTelefonos());
+                personaAux.setTelefonoCollection(listaTelefonos());
                 
                 
                 contactosON.actualizarContacto(personaAux);
@@ -658,7 +658,7 @@ public class VistaPersonas extends javax.swing.JFrame {
     public Persona addPersona() {
         Persona p = new Persona(txtCedula.getText(), txtNombre.getText());
         listTelefono.forEach((t) -> t.setPersonaId(p));
-        p.setListTelefonos(listTelefono);
+        p.setTelefonoCollection(listTelefono);
         return p;
     }
 

@@ -6,32 +6,33 @@
 package ec.edu.ups.appdis.testejb.entidades;
 
 import java.io.Serializable;
+import java.util.Collection;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author Vinicio
  */
 @Entity
-@Table(name = "telefono")
+@Table(name = "persona")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Telefono.findAll", query = "SELECT t FROM Telefono t"),
-    @NamedQuery(name = "Telefono.findById", query = "SELECT t FROM Telefono t WHERE t.id = :id"),
-    @NamedQuery(name = "Telefono.findByNumero", query = "SELECT t FROM Telefono t WHERE t.numero = :numero")})
-public class Telefono implements Serializable {
+    @NamedQuery(name = "Persona.findAll", query = "SELECT p FROM Persona p"),
+    @NamedQuery(name = "Persona.findById", query = "SELECT p FROM Persona p WHERE p.id = :id")})
+public class Persona_1 implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -40,39 +41,32 @@ public class Telefono implements Serializable {
     @Column(name = "id")
     private Integer id;
     @Basic(optional = false)
-    @Column(name = "numero")
-    private int numero;
+    @Lob
+    @Column(name = "cedula")
+    private String cedula;
     @Basic(optional = false)
     @Lob
-    @Column(name = "tipo")
-    private String tipo;
-    @JoinColumn(name = "persona_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
-    private Persona personaId;
+    @Column(name = "nombre")
+    private String nombre;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "personaId")
+    private Collection<Telefono> telefonoCollection;
 
-    public Telefono() {
+    public Persona_1() {
     }
 
-    public Telefono(Integer id) {
+    public Persona_1(Integer id) {
         this.id = id;
     }
 
-    public Telefono(Integer id, int numero, String tipo) {
+    public Persona_1(Integer id, String cedula, String nombre) {
         this.id = id;
-        this.numero = numero;
-        this.tipo = tipo;
+        this.cedula = cedula;
+        this.nombre = nombre;
     }
     
-    public Telefono(int numero, String tipo) {
-        this.numero = numero;
-        this.tipo = tipo;
-    }
-
-    public Telefono(Integer id, int numero, String tipo, Persona personaId) {
-        this.id = id;
-        this.numero = numero;
-        this.tipo = tipo;
-        this.personaId = personaId;
+    public Persona_1( String cedula, String nombre) {
+        this.cedula = cedula;
+        this.nombre = nombre;
     }
     
     public Integer getId() {
@@ -83,28 +77,29 @@ public class Telefono implements Serializable {
         this.id = id;
     }
 
-    public int getNumero() {
-        return numero;
+    public String getCedula() {
+        return cedula;
     }
 
-    public void setNumero(int numero) {
-        this.numero = numero;
+    public void setCedula(String cedula) {
+        this.cedula = cedula;
     }
 
-    public String getTipo() {
-        return tipo;
+    public String getNombre() {
+        return nombre;
     }
 
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
-    public Persona getPersonaId() {
-        return personaId;
+    @XmlTransient
+    public Collection<Telefono> getTelefonoCollection() {
+        return telefonoCollection;
     }
 
-    public void setPersonaId(Persona personaId) {
-        this.personaId = personaId;
+    public void setTelefonoCollection(Collection<Telefono> telefonoCollection) {
+        this.telefonoCollection = telefonoCollection;
     }
 
     @Override
@@ -117,10 +112,10 @@ public class Telefono implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Telefono)) {
+        if (!(object instanceof Persona_1)) {
             return false;
         }
-        Telefono other = (Telefono) object;
+        Persona_1 other = (Persona_1) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -129,7 +124,7 @@ public class Telefono implements Serializable {
 
     @Override
     public String toString() {
-        return "ec.edu.ups.appdis.testejb.entidades.Telefono[ id=" + id + " ]";
+        return "ec.edu.ups.appdis.testejb.entidades.Persona[ id=" + id + " ]";
     }
     
 }

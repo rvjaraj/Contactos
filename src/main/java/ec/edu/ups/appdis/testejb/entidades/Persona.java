@@ -6,23 +6,50 @@
 package ec.edu.ups.appdis.testejb.entidades;
 
 import java.io.Serializable;
+import java.util.Collection;
+import javax.persistence.Basic;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Lob;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
-import java.util.List;
-
-
-
+/**
+ *
+ * @author Vinicio
+ */
+@Entity
+@Table(name = "persona")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "Persona.findAll", query = "SELECT p FROM Persona p"),
+    @NamedQuery(name = "Persona.findById", query = "SELECT p FROM Persona p WHERE p.id = :id")})
 public class Persona implements Serializable {
 
     private static final long serialVersionUID = 1L;
-  
-   
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "id")
     private Integer id;
-    
+    @Basic(optional = false)
+    @Lob
+    @Column(name = "cedula")
     private String cedula;
-    
+    @Basic(optional = false)
+    @Lob
+    @Column(name = "nombre")
     private String nombre;
-    
-    private List<Telefono> listTelefonos;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "personaId")
+    private Collection<Telefono> telefonoCollection;
 
     public Persona() {
     }
@@ -31,20 +58,17 @@ public class Persona implements Serializable {
         this.id = id;
     }
 
-    public Persona(String cedula, String nombre) {
-        
-        this.cedula = cedula;
-        this.nombre = nombre;
-    }
-
-    public Persona(Integer id, String cedula, String nombre, List<Telefono> telefonoCollection) {
+    public Persona(Integer id, String cedula, String nombre) {
         this.id = id;
         this.cedula = cedula;
         this.nombre = nombre;
-        this.listTelefonos = telefonoCollection;
     }
     
-
+    public Persona( String cedula, String nombre) {
+        this.cedula = cedula;
+        this.nombre = nombre;
+    }
+    
     public Integer getId() {
         return id;
     }
@@ -69,16 +93,34 @@ public class Persona implements Serializable {
         this.nombre = nombre;
     }
 
-     public List<Telefono> getListTelefonos() {
-        return listTelefonos;
+    @XmlTransient
+    public Collection<Telefono> getTelefonoCollection() {
+        return telefonoCollection;
     }
 
-    public void setListTelefonos(List<Telefono> listTelefonos) {
-        this.listTelefonos = listTelefonos;
+    public void setTelefonoCollection(Collection<Telefono> telefonoCollection) {
+        this.telefonoCollection = telefonoCollection;
     }
 
-    
-   
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (id != null ? id.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Persona)) {
+            return false;
+        }
+        Persona other = (Persona) object;
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+            return false;
+        }
+        return true;
+    }
 
     @Override
     public String toString() {
