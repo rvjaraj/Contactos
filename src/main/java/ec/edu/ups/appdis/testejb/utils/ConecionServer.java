@@ -5,11 +5,11 @@
  */
 package ec.edu.ups.appdis.testejb.utils;
 
-import ec.edu.ups.appdis.testejb.business.ContactosONRemote;
 import java.util.Hashtable;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.swing.JOptionPane;
+import ec.edu.ups.appdis.testejb.business.ContactosONRemote;
 
 /**
  *

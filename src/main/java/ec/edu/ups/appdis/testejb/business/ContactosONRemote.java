@@ -10,7 +10,7 @@ package ec.edu.ups.appdis.testejb.business;
 import ec.edu.ups.appdis.testejb.entidades.Persona;
 import ec.edu.ups.appdis.testejb.entidades.Telefono;
 import java.util.List;
-//import javax.ejb.Remote;
+import javax.ejb.Remote;
 
 
 /**
@@ -18,7 +18,7 @@ import java.util.List;
  * @author vinic
  */
 
-
+@Remote
 public interface ContactosONRemote {
 
     public boolean guardadoContacto(Persona persona)throws Exception;
@@ -30,6 +30,8 @@ public interface ContactosONRemote {
     public Persona buscarPersonaCedula(String cedula)throws Exception;
 
     public void eliminarPersona(Persona p)throws Exception;
+    
+    public void eliminarPersonaId(int id)throws Exception;
 
     public void eliminarTelefono(int id)throws Exception;
 

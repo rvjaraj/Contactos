@@ -6,33 +6,50 @@
 package ec.edu.ups.appdis.testejb.entidades;
 
 import java.io.Serializable;
+
 import java.util.List;
 
-/**
- *
- * @author vinic
- */
-public class Persona implements Serializable{
-    private int id;
+
+
+public class Persona implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+  
+   
+    private Integer id;
+    
     private String cedula;
+    
     private String nombre;
-    private List<Telefono> listaTelefonos;
+    
+    private List<Telefono> listTelefonos;
 
     public Persona() {
     }
 
-    public Persona(int id, String cedula, String nombre, List<Telefono> listaTelefonos) {
+    public Persona(Integer id) {
+        this.id = id;
+    }
+
+    public Persona(String cedula, String nombre) {
+        
+        this.cedula = cedula;
+        this.nombre = nombre;
+    }
+
+    public Persona(Integer id, String cedula, String nombre, List<Telefono> telefonoCollection) {
         this.id = id;
         this.cedula = cedula;
         this.nombre = nombre;
-        this.listaTelefonos = listaTelefonos;
+        this.listTelefonos = telefonoCollection;
     }
+    
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -52,12 +69,20 @@ public class Persona implements Serializable{
         this.nombre = nombre;
     }
 
-    public List<Telefono> getListaTelefonos() {
-        return listaTelefonos;
+     public List<Telefono> getListTelefonos() {
+        return listTelefonos;
     }
 
-    public void setListaTelefonos(List<Telefono> listaTelefonos) {
-        this.listaTelefonos = listaTelefonos;
+    public void setListTelefonos(List<Telefono> listTelefonos) {
+        this.listTelefonos = listTelefonos;
+    }
+
+    
+   
+
+    @Override
+    public String toString() {
+        return "ec.edu.ups.appdis.testejb.entidades.Persona[ id=" + id + " ]";
     }
     
 }

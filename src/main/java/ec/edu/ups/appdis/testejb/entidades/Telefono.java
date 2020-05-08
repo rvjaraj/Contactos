@@ -7,39 +7,56 @@ package ec.edu.ups.appdis.testejb.entidades;
 
 import java.io.Serializable;
 
-/**
- *
- * @author vinic
- */
-public class Telefono implements Serializable{
-    private int id;
-    private String  numero;
-    private String tipo;    
-    private int persona_id;
+
+public class Telefono implements Serializable {
+    
+
+    private static final long serialVersionUID = -558553967080513790L;
+    
+    private Integer id;
+    
+   
+    private int numero;
+    
+   
+    private String tipo;
+    
+   
+    private Persona personaId;
 
     public Telefono() {
     }
 
-    public Telefono(int id, String nombre, String tipo, int persona_id) {
+    public Telefono(Integer id) {
         this.id = id;
-        this.numero = nombre;
-        this.tipo = tipo;
-        this.persona_id = persona_id;
     }
 
-    public int getId() {
+    public Telefono(int numero, String tipo) {
+        this.numero = numero;
+        this.tipo = tipo;
+    }
+
+    public Telefono(Integer id, int numero, String tipo, Persona personaId) {
+        this.id = id;
+        this.numero = numero;
+        this.tipo = tipo;
+        this.personaId = personaId;
+    }
+    
+
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public String getNumero() {
+    public int getNumero() {
         return numero;
     }
 
-    public void setNumero(String numero) {
+    public void setNumero(int numero) {
         this.numero = numero;
     }
 
@@ -51,12 +68,19 @@ public class Telefono implements Serializable{
         this.tipo = tipo;
     }
 
-    public int getPersona_id() {
-        return persona_id;
+    public Persona getPersonaId() {
+        return personaId;
     }
 
-    public void setPersona_id(int persona_id) {
-        this.persona_id = persona_id;
+    public void setPersonaId(Persona personaId) {
+        this.personaId = personaId;
     }
-            
+
+  
+   
+    @Override
+    public String toString() {
+        return "ec.edu.ups.appdis.testejb.entidades.Telefono[ id=" + id + " ]";
+    }
+    
 }

@@ -5,8 +5,6 @@
  */
 package ec.edu.ups.appdis.testejb.view;
 
-
-import ec.edu.ups.appdis.testejb.business.ContactosONRemote;
 import ec.edu.ups.appdis.testejb.entidades.Persona;
 import ec.edu.ups.appdis.testejb.entidades.Telefono;
 import ec.edu.ups.appdis.testejb.utils.ConecionServer;
@@ -18,6 +16,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import ec.edu.ups.appdis.testejb.business.ContactosONRemote;
 
 /**
  *
@@ -30,15 +29,15 @@ public class VistaPersonas extends javax.swing.JFrame {
      */
     private List<Telefono> listTelefono;
     public ContactosONRemote contactosON;
-    private int codAux;
-    
+    private Persona personaAux;
+
     public VistaPersonas() throws Exception {
-        
+
         initComponents();
         listTelefono = new ArrayList<>();
         ConecionServer cs = new ConecionServer();
-        contactosON =  cs.getRemote();
-        codAux = -500;
+        contactosON = cs.getRemote();
+        personaAux = null;
     }
 
     /**
@@ -426,11 +425,11 @@ public class VistaPersonas extends javax.swing.JFrame {
     }//GEN-LAST:event_txtCedulaKeyPressed
 
     private void txtCedulaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCedulaKeyTyped
-        //        if (evt.getKeyCode() != KeyEvent.VK_DELETE) {
-        //            if (evt.getKeyChar() < '0' || evt.getKeyChar() > '9') {
-        //                evt.consume();
-        //            }
-        //        }
+        if (evt.getKeyCode() != KeyEvent.VK_DELETE) {
+            if (evt.getKeyChar() < '0' || evt.getKeyChar() > '9') {
+                evt.consume();
+            }
+        }
     }//GEN-LAST:event_txtCedulaKeyTyped
 
     private void txtNombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreKeyTyped
@@ -447,7 +446,7 @@ public class VistaPersonas extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnAgregarTelefonoActionPerformed
     public boolean validarTelefono() {
-        
+
         if (txtTelefono.getText().equals("")) {
             JOptionPane.showMessageDialog(this, "Ingresar un numero de telefono");
             return false;
@@ -458,11 +457,11 @@ public class VistaPersonas extends javax.swing.JFrame {
         }
         return true;
     }
-    
+
     public Telefono addTelefono() {
-        return new Telefono(0, txtTelefono.getText(), comboTelefono.getSelectedItem().toString(), 0);
+        return new Telefono(Integer.valueOf(txtTelefono.getText()), comboTelefono.getSelectedItem().toString());
     }
-    
+
     public void limpiarTelefono() {
         txtTelefono.setText("");
         comboTelefono.setSelectedIndex(0);
@@ -499,24 +498,24 @@ public class VistaPersonas extends javax.swing.JFrame {
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, ex.getMessage());
             }
-            
+
         }
     }//GEN-LAST:event_panelesCrudClienteStateChanged
-    
+
     public void limpiarTabla() {
         DefaultTableModel modelo = (DefaultTableModel) tabla.getModel();
         while (modelo.getRowCount() > 0) {
             modelo.removeRow(0);
         }
     }
-    
+
     public void limpiarTablaCotacto() {
         DefaultTableModel modelo = (DefaultTableModel) tablaContacos.getModel();
         while (modelo.getRowCount() > 0) {
             modelo.removeRow(0);
         }
     }
-    
+
     public void limpiarTablaCotactoB() {
         DefaultTableModel modelo = (DefaultTableModel) tablaContacosB.getModel();
         while (modelo.getRowCount() > 0) {
@@ -531,9 +530,10 @@ public class VistaPersonas extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Contacto Ingresado");
                 limpiarCrear();
             } catch (Exception e) {
+                System.out.println(e);
                 JOptionPane.showMessageDialog(this, e.getMessage());
             }
-            
+
         }
     }//GEN-LAST:event_btnGuardar1ActionPerformed
 
@@ -555,13 +555,13 @@ public class VistaPersonas extends javax.swing.JFrame {
 
     private void txtBuscarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            
+
             try {
                 Persona p = contactosON.buscarPersonaCedula(txtBuscar.getText());
-                codAux = p.getId();
+                personaAux = p;
                 txtNombreB.setText(p.getNombre());
                 txtCedulaB.setText(p.getCedula());
-                List<Telefono> lista = p.getListaTelefonos();
+                List<Telefono> lista = (List<Telefono>) p.getListTelefonos();
                 if (!lista.isEmpty()) {
                     limpiarTablaCotactoB();
                     DefaultTableModel model = (DefaultTableModel) tablaContacosB.getModel();
@@ -581,7 +581,7 @@ public class VistaPersonas extends javax.swing.JFrame {
                 limpiarBuscar();
                 JOptionPane.showMessageDialog(this, ex.getMessage());
             }
-            
+
         }
     }//GEN-LAST:event_txtBuscarKeyPressed
 
@@ -593,11 +593,14 @@ public class VistaPersonas extends javax.swing.JFrame {
         if (JOptionPane.showConfirmDialog(this, "Seguro desea Eliminar") == JOptionPane.OK_OPTION) {
             try {
                 Persona p = contactosON.buscarPersonaCedula(txtCedulaB.getText());
-                contactosON.eliminarPersona(p);
+                contactosON.eliminarPersonaId(p.getId());
                 limpiarBuscar();
                 JOptionPane.showMessageDialog(this, "Persona Eliminada");
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, e.getMessage());
+                e.printStackTrace();
+                System.err.println(e.getCause());
+                System.out.println(e.getLocalizedMessage());
+                JOptionPane.showMessageDialog(this, e.getMessage() );
             }
         }
     }//GEN-LAST:event_btnEliminarActionPerformed
@@ -619,8 +622,12 @@ public class VistaPersonas extends javax.swing.JFrame {
             tablaContacosB.setEnabled(true);
         } else {
             try {
-                Persona p = new Persona(codAux, txtCedulaB.getText(), txtNombreB.getText(), listaTelefonos());
-                contactosON.actualizarContacto(p);
+                personaAux.setCedula(txtCedulaB.getText());
+                personaAux.setNombre(txtNombreB.getText());
+                personaAux.setListTelefonos(listaTelefonos());
+                
+                
+                contactosON.actualizarContacto(personaAux);
                 JOptionPane.showMessageDialog(this, "Persona Actualizada");
                 limpiarBuscar();
             } catch (Exception e) {
@@ -635,22 +642,26 @@ public class VistaPersonas extends javax.swing.JFrame {
         limpiarTelefono();
         comboTelefono.setSelectedIndex(0);
     }
-    
+
     public List<Telefono> listaTelefonos() {
         List<Telefono> lista = new ArrayList<>();
+        
         for (int i = 0; i < tablaContacosB.getRowCount(); i++) {
             int id = (int) tablaContacosB.getValueAt(i, 0);
-            String numero = (String) tablaContacosB.getValueAt(i, 1);
-            String tipo = (String) tablaContacosB.getValueAt(i, 2);
-            lista.add(new Telefono(id, numero, tipo, codAux));
+            int numero = Integer.parseInt(tablaContacosB.getValueAt(i, 1).toString());
+            String tipo = (String) tablaContacosB.getValueAt(i, 2).toString();
+            lista.add(new Telefono(id, numero, tipo,personaAux));
         }
         return lista;
     }
-    
+
     public Persona addPersona() {
-        return new Persona(0, txtCedula.getText(), txtNombre.getText(), listTelefono);
+        Persona p = new Persona(txtCedula.getText(), txtNombre.getText());
+        listTelefono.forEach((t) -> t.setPersonaId(p));
+        p.setListTelefonos(listTelefono);
+        return p;
     }
-    
+
     public boolean validarPersona() {
         if (txtCedula.getText().equals("")) {
             JOptionPane.showMessageDialog(this, "Ingres una cedula");
